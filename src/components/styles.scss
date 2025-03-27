@@ -1,0 +1,202 @@
+// Variables
+$primary-color: #ff6b6b;
+$secondary-color: #ff8e53;
+$brush-color: #fff3e6;
+$stroke-color: rgba(212, 106, 106, 0.3);
+$mobile-breakpoint: 414px;
+$small-mobile-breakpoint: 360px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Base styles
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Pacifico', cursive;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(45deg, $primary-color, $secondary-color);
+  @include flex-center;
+  position: relative;
+  overflow: hidden;
+}
+
+// Content styles
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  
+  .title {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    animation: pop 1s ease-out;
+  }
+  
+  .message {
+    font-size: 2rem;
+    margin: 1rem 0;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .signature {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    font-style: italic;
+  }
+}
+
+// Brush text animation
+.brush-phrase {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+
+.brush-letter {
+  position: relative;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.8rem;
+  color: $brush-color;
+  opacity: 0;
+  transform: translateY(20px);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  
+  &.visible {
+    animation: 
+      letterAppear 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards,
+      letterFloat 3s ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+}
+
+.brush-stroke {
+  position: absolute;
+  top: -5px;
+  left: -10px;
+  width: 0;
+  height: 120%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    $stroke-color 50%,
+    transparent 100%
+  );
+  animation: brushStroke 0.8s ease-out forwards;
+  animation-delay: var(--delay);
+}
+
+// Animations
+@keyframes pop {
+  0% { transform: scale(0); }
+  90% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes letterAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(2);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes brushStroke {
+  from {
+    width: 0;
+    opacity: 1;
+  }
+  to {
+    width: 140%;
+    opacity: 0;
+  }
+}
+
+// Mobile adaptations
+@media (max-width: $mobile-breakpoint) {
+  .content {
+    padding: 10px;
+    
+    .title {
+      font-size: 2.2rem !important;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+    
+    .message {
+      font-size: 1.4rem !important;
+      margin: 0.8rem 0;
+    }
+    
+    .signature {
+      font-size: 1.2rem;
+      margin-top: 2rem;
+    }
+  }
+
+  .brush-phrase {
+    top: 80%;
+    gap: 4px;
+  }
+
+  .brush-letter {
+    font-size: 1.8rem !important;
+  }
+}
+
+@media (max-width: $small-mobile-breakpoint) and (max-height: 740px) {
+  .content {
+    .title {
+      font-size: 1.8rem !important;
+    }
+    
+    .message {
+      font-size: 1.2rem !important;
+    }
+  }
+
+  .brush-phrase {
+    top: 82%;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%;
+  }
+
+  .brush-letter {
+    font-size: 1.6rem !important;
+    margin: 0 2px;
+  }
+}
+
+@media (max-height: 600px) {
+  .content {
+    transform: scale(0.9);
+  }
+  
+  .brush-phrase {
+    display: none;
+  }
+}
